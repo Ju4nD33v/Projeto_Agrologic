@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLogic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="icon-bg"><i class="fa-solid fa-leaf"></i></div>
+            </div>
+            <nav class="sidebar-menu">
+                
+                <a href="dashboard.html" class="menu-item ">
+                    <i class="fa-solid fa-table-cells-large"></i><span>Painel</span>
+                </a>
+                <a href="safras.html" class="menu-item ">
+                    <i class="fa-solid fa-wheat-awn"></i><span>Safras</span>
+                </a>
+                <a href="registrar-safra.html" class="menu-item ">
+                    <i class="fa-solid fa-plant-wilt"></i><span>Registrar Safra</span>
+                </a>
+                <a href="relatorios.html" class="menu-item ">
+                    <i class="fa-solid fa-clipboard-list"></i><span>Relatórios</span>
+                </a>
+                <a href="analise.html" class="menu-item active">
+                    <i class="fa-solid fa-chart-line"></i><span>Análise</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="suporte.html" class="menu-item ">
+                    <i class="fa-solid fa-circle-question"></i><span>Suporte</span>
+                </a>
+            </div>
+        </aside>
+
+        <header class="topbar">
+            <div class="search-bar">
+                <input type="text" placeholder="Procurar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h1 class="page-title">Análise</h1>
+            <div class="topbar-actions">
+                <i class="fa-regular fa-comment-dots"></i>
+                <div style="position:relative; display:inline-block;">
+                    <i class="fa-regular fa-bell" style="cursor:pointer;" onclick="app.toggleNotifications(event)"></i>
+                    <div id="notif-dropdown" class="notif-dropdown"></div>
+                </div>
+                <span class="user-name">Nome</span>
+                <div class="user-avatar"></div>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <div class="sub-view active">
+                
+                <div class="card form-header mb-15 space-between">
+                    <div class="flex-row">
+                        <div class="icon-circle-large"><i class="fa-solid fa-magnifying-glass-chart text-green"></i></div>
+                        <div>
+                            <h2>Análise</h2>
+                            <p>Compare dados das safras e acompanhe indicadores para tomar decisões mais inteligentes</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary-yellow" onclick="app.gerarAnalise()"><i class="fa-solid fa-chart-column"></i> Gerar análise</button>
+                </div>
+
+                <div class="card mb-15">
+                    <h3><i class="fa-solid fa-filter"></i> Filtros de análise</h3>
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>Safra</label><input type="text" value="Safra de soja 2025" class="form-input">
+                        </div>
+                        <div class="filter-group">
+                            <label>Indicador</label><input type="text" value="Produtividade" class="form-input">
+                        </div>
+                        <div class="filter-group">
+                            <label>Periodo</label><input type="text" value="Ultimos 30 dias" class="form-input">
+                        </div>
+                        <div class="filter-group">
+                            <label>Comparar com</label><input type="text" value="Safra anterior" class="form-input">
+                        </div>
+                        <div class="filter-actions-col">
+                            <button class="btn-primary-yellow" onclick="app.aplicarAnalise()">Aplicar análise</button>
+                            <button class="btn-outline-gray mt-5">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid mb-15">
+                    <div class="card stat-item-large">
+                        <div class="icon-circle-bg"><i class="fa-solid fa-chart-line text-green"></i></div>
+                        <div class="info">Produtividade estimada<br><strong>78%</strong></div>
+                    </div>
+                    <div class="card stat-item-large">
+                        <div class="icon-circle-bg"><i class="fa-solid fa-droplet text-green"></i></div>
+                        <div class="info">Umidade média<br><strong>55%</strong></div>
+                    </div>
+                    <div class="card stat-item-large">
+                        <div class="icon-circle-bg"><i class="fa-solid fa-brazilian-real-sign text-green"></i></div>
+                        <div class="info">Preço médio da soja<br><strong>R$145,00</strong></div>
+                    </div>
+                    <div class="card stat-item-large">
+                        <div class="icon-circle-bg"><i class="fa-solid fa-shield-halved text-green"></i></div>
+                        <div class="info">Risco atual<br><strong class="text-yellow">Médio</strong></div>
+                    </div>
+                </div>
+
+                <div class="analise-grid mb-15">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-line text-green"></i> Evolução da safra</h3>
+                            <div class="tabs"><button class="active" onclick="app.changeAnaliseChart('produtividade')">Produtividade</button><button onclick="app.changeAnaliseChart('solo')">Solo</button><button onclick="app.changeAnaliseChart('mercado')">Mercado</button></div>
+                        </div>
+                        <div style="height: 150px; position: relative;">
+                            <canvas id="analiseChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-regular fa-lightbulb text-green"></i> Insights inteligentes</h3>
+                        <ul class="insights-list">
+                            <li><i class="fa-solid fa-arrow-trend-up text-green"></i> A produtividade estimada subiu 12% em relação ao mês anterior</li>
+                            <li><i class="fa-solid fa-droplet text-green"></i> A umidade do solo está abaixo do ideal</li>
+                            <li><i class="fa-solid fa-chart-simple text-green"></i> O preço da soja apresenta tendência de alta</li>
+                            <li><i class="fa-solid fa-leaf text-green"></i> Recomenda-se monitorar irrigação nos próximos dias</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="analise-grid">
+                    <div class="card">
+                        <h3><i class="fa-regular fa-calendar"></i> Comparativo de Safras</h3>
+                        <table class="data-table">
+                            <thead><tr><th>Safra</th><th>Cultura</th><th>Produtividade</th><th>Umidade</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Soja 2025</td><td>Soja</td><td>78%</td><td>55%</td><td><span class="badge light-green"><span class="dot-status green"></span> Crescimento</span></td></tr>
+                                <tr><td>Milho 2024</td><td>Milho</td><td>65%</td><td>48%</td><td><span class="badge light-blue"><span class="dot-status blue"></span> Finalizada</span></td></tr>
+                                <tr><td>Café 2024</td><td>Café</td><td>72%</td><td>61%</td><td><span class="badge light-blue"><span class="dot-status blue"></span> Finalizada</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-gear"></i> A definir</h3>
+                        <ul class="tasks-list">
+                            <li><i class="fa-solid fa-droplet"></i> Ajustar irrigação da área 01</li>
+                            <li><i class="fa-solid fa-chart-line"></i> Acompanhar variação do preço da soja</li>
+                            <li><i class="fa-solid fa-file-invoice"></i> Gerar relatório semanal da safra</li>
+                            <li><i class="fa-solid fa-seedling"></i> Revisar condição do solo nos proximos 7 dias</li>
+                        </ul>
+                        <button class="btn-outline-green full-width mt-10" onclick="app.exportar('PDF')"><i class="fa-solid fa-trophy"></i> Exportar análise</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals & Overlays -->
+    <div id="modal-container" class="modal-overlay" style="display: none;"></div>
+    
+    <!-- Chat Widget -->
+    <div id="chat-widget" class="chat-widget" style="display: none;">
+        <div class="chat-header">
+            <div><i class="fa-solid fa-headset"></i> Suporte AgroLogic</div>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="app.fecharChat()"></i>
+        </div>
+        <div class="chat-body" id="chat-messages">
+            <div class="message system">Seu atendimento foi iniciado</div>
+            <div class="message system">Nossa equipe responderá em breve</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Digite sua mensagem..." id="chat-input" onkeypress="if(event.key === 'Enter') app.enviarMensagemChat()">
+            <button onclick="app.enviarMensagemChat()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

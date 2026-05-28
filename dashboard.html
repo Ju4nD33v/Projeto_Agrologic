@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLogic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="icon-bg"><i class="fa-solid fa-leaf"></i></div>
+            </div>
+            <nav class="sidebar-menu">
+                
+                <a href="dashboard.html" class="menu-item active">
+                    <i class="fa-solid fa-table-cells-large"></i><span>Painel</span>
+                </a>
+                <a href="safras.html" class="menu-item ">
+                    <i class="fa-solid fa-wheat-awn"></i><span>Safras</span>
+                </a>
+                <a href="registrar-safra.html" class="menu-item ">
+                    <i class="fa-solid fa-plant-wilt"></i><span>Registrar Safra</span>
+                </a>
+                <a href="relatorios.html" class="menu-item ">
+                    <i class="fa-solid fa-clipboard-list"></i><span>Relatórios</span>
+                </a>
+                <a href="analise.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-line"></i><span>Análise</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="suporte.html" class="menu-item ">
+                    <i class="fa-solid fa-circle-question"></i><span>Suporte</span>
+                </a>
+            </div>
+        </aside>
+
+        <header class="topbar">
+            <div class="search-bar">
+                <input type="text" placeholder="Procurar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h1 class="page-title">Painel</h1>
+            <div class="topbar-actions">
+                <i class="fa-regular fa-comment-dots"></i>
+                <div style="position:relative; display:inline-block;">
+                    <i class="fa-regular fa-bell" style="cursor:pointer;" onclick="app.toggleNotifications(event)"></i>
+                    <div id="notif-dropdown" class="notif-dropdown"></div>
+                </div>
+                <span class="user-name">Nome</span>
+                <div class="user-avatar"></div>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <div class="sub-view active">
+                
+                <div class="dashboard-grid">
+                    <div class="weather-widget dark-panel">
+                        <div class="weather-header">
+                            <span><i class="fa-solid fa-location-dot"></i> Franca - SP</span>
+                            <a href="#">Escolher região</a>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                        <div class="weather-current">
+                            <i class="fa-solid fa-sun weather-icon"></i>
+                            <div class="temp">23<span>°C|°F</span></div>
+                            <div class="details">
+                                Chuva: 0%<br>Umidade: 55%<br>Vento: 5 km/h
+                            </div>
+                        </div>
+                        <div class="weather-forecast">
+                            <div class="day"><span>sex.</span><i class="fa-solid fa-cloud-sun"></i><span>27° 16°</span></div>
+                            <div class="day"><span>sáb.</span><i class="fa-solid fa-sun"></i><span>28° 18°</span></div>
+                            <div class="day"><span>dom.</span><i class="fa-solid fa-cloud-sun"></i><span>28° 17°</span></div>
+                            <div class="day"><span>seg.</span><i class="fa-solid fa-sun"></i><span>28° 17°</span></div>
+                            <div class="day"><span>ter.</span><i class="fa-solid fa-sun"></i><span>28° 17°</span></div>
+                            <div class="day"><span>qua.</span><i class="fa-solid fa-sun"></i><span>28° 17°</span></div>
+                            <div class="day"><span>qui.</span><i class="fa-solid fa-sun"></i><span>28° 17°</span></div>
+                            <div class="day"><span>sex.</span><i class="fa-solid fa-cloud-sun"></i><span>28° 18°</span></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card card" style="grid-column: 1 / 2; grid-row: 2 / 3;">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-chart-simple"></i> Cotação de grãos:</h2>
+                            <div class="time-filters">
+                                <span style="cursor:pointer;" onclick="app.updateChart('dashboard', this)">7 dias</span>
+                                <span style="cursor:pointer;" class="active" onclick="app.updateChart('dashboard', this)">30 dias</span>
+                                <span style="cursor:pointer;" class="green-bg" onclick="app.updateChart('dashboard', this)">1 ano</span>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            <span class="dot green"></span> Café Ara
+                            <span class="dot red"></span> Soja
+                            <span class="dot cyan"></span> Milho
+                            <span class="dot white"></span> Algodão
+                        </div>
+                        <div class="chart-container dark-chart-bg" style="height: 120px;">
+                            <canvas id="cotacaoChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="alerts-card card" style="grid-column: 2 / 3; grid-row: 2 / 3; align-self: start;">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-bell text-yellow"></i> Alertas:</h2>
+                        </div>
+                        <ul class="alerts-list">
+                            <li><i class="fa-solid fa-triangle-exclamation text-red"></i> Baixa umidade no solo</li>
+                            <li><i class="fa-solid fa-arrow-trend-down text-gray"></i> Queda no preço do café</li>
+                            <li><i class="fa-solid fa-cloud-bolt text-gray"></i> Previsão de chuva</li>
+                        </ul>
+                        <div class="text-right"><strong>Ver todos</strong></div>
+                    </div>
+
+                    <div class="summary-card card" style="grid-column: 1 / 2; grid-row: 3 / 4;">
+                        <h3><i class="fa-solid fa-wheat-awn text-yellow"></i> Resumo da safra de milho 2025:</h3>
+                        <div class="summary-row"><i class="fa-solid fa-leaf"></i> Cultura: <span>Milho</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-location-dot"></i> Área: <span>13 Hectares</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-clipboard-check"></i> Status: <span><span class="dot-status green"></span> Crescimento</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-stopwatch"></i> Previsão: <span>15/06/2026</span></div>
+                    </div>
+
+                    <div class="summary-card card" style="grid-column: 2 / 3; grid-row: 3 / 4;">
+                        <h3><i class="fa-solid fa-wheat-awn text-yellow"></i> Resumo da Safra de soja 2026:</h3>
+                        <div class="summary-row"><i class="fa-solid fa-leaf"></i> Cultura: <span>Soja</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-location-dot"></i> Área: <span>13 Hectares</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-clipboard-check"></i> Status: <span><span class="dot-status green"></span> Crescimento</span></div>
+                        <div class="summary-row"><i class="fa-solid fa-stopwatch"></i> Previsão: <span>17/04/2027</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals & Overlays -->
+    <div id="modal-container" class="modal-overlay" style="display: none;"></div>
+    
+    <!-- Chat Widget -->
+    <div id="chat-widget" class="chat-widget" style="display: none;">
+        <div class="chat-header">
+            <div><i class="fa-solid fa-headset"></i> Suporte AgroLogic</div>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="app.fecharChat()"></i>
+        </div>
+        <div class="chat-body" id="chat-messages">
+            <div class="message system">Seu atendimento foi iniciado</div>
+            <div class="message system">Nossa equipe responderá em breve</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Digite sua mensagem..." id="chat-input" onkeypress="if(event.key === 'Enter') app.enviarMensagemChat()">
+            <button onclick="app.enviarMensagemChat()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

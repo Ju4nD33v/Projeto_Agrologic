@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLogic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="icon-bg"><i class="fa-solid fa-leaf"></i></div>
+            </div>
+            <nav class="sidebar-menu">
+                
+                <a href="dashboard.html" class="menu-item ">
+                    <i class="fa-solid fa-table-cells-large"></i><span>Painel</span>
+                </a>
+                <a href="safras.html" class="menu-item active">
+                    <i class="fa-solid fa-wheat-awn"></i><span>Safras</span>
+                </a>
+                <a href="registrar-safra.html" class="menu-item ">
+                    <i class="fa-solid fa-plant-wilt"></i><span>Registrar Safra</span>
+                </a>
+                <a href="relatorios.html" class="menu-item ">
+                    <i class="fa-solid fa-clipboard-list"></i><span>Relatórios</span>
+                </a>
+                <a href="analise.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-line"></i><span>Análise</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="suporte.html" class="menu-item ">
+                    <i class="fa-solid fa-circle-question"></i><span>Suporte</span>
+                </a>
+            </div>
+        </aside>
+
+        <header class="topbar">
+            <div class="search-bar">
+                <input type="text" placeholder="Procurar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h1 class="page-title">Safras</h1>
+            <div class="topbar-actions">
+                <i class="fa-regular fa-comment-dots"></i>
+                <div style="position:relative; display:inline-block;">
+                    <i class="fa-regular fa-bell" style="cursor:pointer;" onclick="app.toggleNotifications(event)"></i>
+                    <div id="notif-dropdown" class="notif-dropdown"></div>
+                </div>
+                <span class="user-name">Nome</span>
+                <div class="user-avatar"></div>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <div class="sub-view active">
+                
+                <div class="safras-layout">
+                    <div class="safras-list-panel">
+                        <button class="btn-primary-yellow full-width mb-15" onclick="window.location.href='registrar-safra.html'">
+                            <i class="fa-solid fa-plus"></i> Nova safra
+                        </button>
+                        
+                        <div class="safra-item-card active" onclick="app.changeSafra('soja')" style="cursor:pointer;">
+                            <div class="safra-item-title">Safra de soja 2026 <i class="fa-solid fa-chevron-right float-right"></i></div>
+                            <div class="safra-item-cultura"><i class="fa-solid fa-leaf text-green"></i> Soja</div>
+                            <div class="progress-bar-container"><div class="progress-bar green" style="width: 70%"></div></div>
+                            <div class="safra-item-date"><i class="fa-regular fa-calendar"></i> Plantio: 01/04/2026</div>
+                            <div class="safra-item-date"><i class="fa-regular fa-clock"></i> Previsão: 15/02/2027</div>
+                        </div>
+
+                        <div class="safra-item-card" onclick="app.changeSafra('milho')" style="cursor:pointer;">
+                            <div class="safra-item-title">Safra de milho 2025 <i class="fa-solid fa-chevron-right float-right"></i></div>
+                            <div class="safra-item-cultura"><i class="fa-solid fa-seedling text-yellow"></i> Milho</div>
+                            <div class="progress-bar-container"><div class="progress-bar green" style="width: 85%"></div></div>
+                            <div class="safra-item-date"><i class="fa-regular fa-calendar"></i> Plantio: 01/04/2025</div>
+                            <div class="safra-item-date"><i class="fa-regular fa-clock"></i> Previsão: 15/06/2026</div>
+                        </div>
+
+                        <div class="safra-item-card" onclick="app.changeSafra('algodao')" style="cursor:pointer;">
+                            <div class="safra-item-title">Safra de algodão 2024 <i class="fa-solid fa-chevron-right float-right"></i></div>
+                            <div class="safra-item-cultura"><i class="fa-solid fa-fan text-gray"></i> Algodão</div>
+                            <div class="progress-bar-container"><div class="progress-bar dark-green" style="width: 100%"></div></div>
+                            <div class="safra-item-date"><i class="fa-regular fa-calendar"></i> Plantio: 10/02/2024</div>
+                            <div class="safra-item-date"><i class="fa-regular fa-clock"></i> Previsão: 15/10/2024</div>
+                        </div>
+                    </div>
+                    
+                    <div class="safras-details-panel">
+                        <div class="details-header">
+                            <h2>Safra de soja 2026</h2>
+                            <div class="details-actions">
+                                <button class="btn-outline-gray" onclick="app.editarSafra()"><i class="fa-solid fa-pen"></i> Editar</button>
+                                <button class="btn-outline-gray" onclick="app.showRelatorioA4()"><i class="fa-solid fa-file-invoice"></i> Relatório</button>
+                                <button class="btn-outline-gray text-red" onclick="app.deleteSafra()"><i class="fa-regular fa-trash-can"></i> Excluir</button>
+                            </div>
+                        </div>
+
+                        <div class="card info-hero">
+                            <div class="hero-title"><i class="fa-solid fa-leaf text-green"></i> Soja</div>
+                            <div class="permissions">
+                                <div>Permissões: <br><strong>Pedro ID(4354) Agrônomo</strong></div>
+                                <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-pen" style="cursor:pointer;" onclick="app.editPermissions()"></i>
+                            </div>
+                        </div>
+
+                        <div class="details-grid">
+                            <div class="card basic-info">
+                                <div><i class="fa-solid fa-location-dot"></i> 120 Hectares</div>
+                                <div><i class="fa-regular fa-calendar"></i> Inicio do plantio: 01/04/2026</div>
+                                <div><i class="fa-regular fa-clock"></i> Previsão de colheita: 15/02/2027</div>
+                            </div>
+
+                            <div class="card evolution-chart-container" style="grid-row: span 2;">
+                                <div class="card-header">
+                                    <h3>Evolução da safra</h3>
+                                    <div class="time-filters">
+                                        <span style="cursor:pointer;" onclick="app.updateChart('safras', this)">7 Dias</span>
+                                        <span style="cursor:pointer;" class="active" onclick="app.updateChart('safras', this)">30 Dias</span>
+                                        <span style="cursor:pointer;" onclick="app.updateChart('safras', this)">1 Ano</span>
+                                    </div>
+                                </div>
+                                <div style="height: 160px; position: relative;">
+                                    <canvas id="evolucaoChart"></canvas>
+                                </div>
+                                <div class="chart-legend-center"><span class="dot green"></span> Produtividade estimada</div>
+                                <button class="btn-primary-yellow full-width mt-15" onclick="app.finalizarPlantio()"><i class="fa-solid fa-check"></i> Finalizar plantio</button>
+                            </div>
+
+                            <div class="card dados-solo">
+                                <h3>Dados do solo</h3>
+                                <div class="solo-widgets">
+                                    <div class="solo-widget">
+                                        <div class="solo-icon blue"><i class="fa-solid fa-droplet"></i> %</div>
+                                        <div><strong>55%</strong><br>Umidade <i class="fa-solid fa-arrow-up text-green"></i></div>
+                                    </div>
+                                    <div class="solo-widget">
+                                        <div class="solo-icon dark"><i class="fa-solid fa-flask"></i> NPK</div>
+                                        <div><strong>10-30-20</strong></div>
+                                    </div>
+                                    <div class="solo-widget full-width">
+                                        <div class="solo-icon light-blue"><i class="fa-solid fa-droplet"></i> pH</div>
+                                        <div><strong>pH 6.2</strong> <i class="fa-solid fa-arrow-up text-green float-right mt-10"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card alertas-safra">
+                                <div class="card-header">
+                                    <h3>Alertas da safra</h3>
+                                    <span class="text-green small">Ver todos</span>
+                                </div>
+                                <ul class="alerts-list">
+                                    <li><i class="fa-solid fa-triangle-exclamation text-red"></i> Baixa umidade do solo <span class="text-green float-right">!</span></li>
+                                    <li><i class="fa-solid fa-cloud-bolt text-gray"></i> Previsão de chuva <span class="text-green float-right">!</span></li>
+                                    <li><i class="fa-solid fa-arrow-trend-down text-red"></i> Queda no preço da soja <span class="text-green small float-right">Ver todos</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals & Overlays -->
+    <div id="modal-container" class="modal-overlay" style="display: none;"></div>
+    
+    <!-- Chat Widget -->
+    <div id="chat-widget" class="chat-widget" style="display: none;">
+        <div class="chat-header">
+            <div><i class="fa-solid fa-headset"></i> Suporte AgroLogic</div>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="app.fecharChat()"></i>
+        </div>
+        <div class="chat-body" id="chat-messages">
+            <div class="message system">Seu atendimento foi iniciado</div>
+            <div class="message system">Nossa equipe responderá em breve</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Digite sua mensagem..." id="chat-input" onkeypress="if(event.key === 'Enter') app.enviarMensagemChat()">
+            <button onclick="app.enviarMensagemChat()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

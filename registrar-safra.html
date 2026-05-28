@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLogic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="icon-bg"><i class="fa-solid fa-leaf"></i></div>
+            </div>
+            <nav class="sidebar-menu">
+                
+                <a href="dashboard.html" class="menu-item ">
+                    <i class="fa-solid fa-table-cells-large"></i><span>Painel</span>
+                </a>
+                <a href="safras.html" class="menu-item ">
+                    <i class="fa-solid fa-wheat-awn"></i><span>Safras</span>
+                </a>
+                <a href="registrar-safra.html" class="menu-item active">
+                    <i class="fa-solid fa-plant-wilt"></i><span>Registrar Safra</span>
+                </a>
+                <a href="relatorios.html" class="menu-item ">
+                    <i class="fa-solid fa-clipboard-list"></i><span>Relatórios</span>
+                </a>
+                <a href="analise.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-line"></i><span>Análise</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="suporte.html" class="menu-item ">
+                    <i class="fa-solid fa-circle-question"></i><span>Suporte</span>
+                </a>
+            </div>
+        </aside>
+
+        <header class="topbar">
+            <div class="search-bar">
+                <input type="text" placeholder="Procurar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h1 class="page-title">Registro de safras</h1>
+            <div class="topbar-actions">
+                <i class="fa-regular fa-comment-dots"></i>
+                <div style="position:relative; display:inline-block;">
+                    <i class="fa-regular fa-bell" style="cursor:pointer;" onclick="app.toggleNotifications(event)"></i>
+                    <div id="notif-dropdown" class="notif-dropdown"></div>
+                </div>
+                <span class="user-name">Nome</span>
+                <div class="user-avatar"></div>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <div class="sub-view active">
+                
+                <div class="card form-header mb-15">
+                    <div class="icon-circle-large"><i class="fa-solid fa-leaf text-green"></i></div>
+                    <div>
+                        <h2>Nova Safra</h2>
+                        <p>Preencha os dados para iniciar o acompanhamento produtivo.</p>
+                    </div>
+                </div>
+
+                <div class="registrar-grid">
+                    <div class="registrar-form-col">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-clipboard-list text-green"></i> Informações da Safra</h3>
+                            <div class="form-row">
+                                <label>Cultura</label>
+                                <select id="cultura-atual" class="form-input" onchange="app.updateResumoSafra()">
+                                    <option value="Soja">Soja</option>
+                                    <option value="Milho">Milho</option>
+                                    <option value="Algodão">Algodão</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>Qtd de semente por Pé</label>
+                                <input type="text" class="form-input" placeholder="Ex:3 Und">
+                            </div>
+                            <div class="form-row">
+                                <label>Distancia fileiras</label>
+                                <input type="text" class="form-input" placeholder="Ex: 102cm">
+                            </div>
+                            <div class="form-row">
+                                <label>Distancia pés</label>
+                                <input type="text" class="form-input" placeholder="Ex: 56cm">
+                            </div>
+                        </div>
+
+                        <div class="card mt-15">
+                            <h3><i class="fa-solid fa-mound text-brown"></i> Dados iniciais do solo</h3>
+                            <div class="form-row">
+                                <label>Cultura anterior</label>
+                                <select id="cultura-anterior" class="form-input">
+                                    <option value="Milho">Milho</option>
+                                    <option value="Cana-de-açúcar">Cana-de-açúcar</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>pH</label>
+                                <input type="text" class="form-input" value="6.2">
+                            </div>
+                            <div class="form-row">
+                                <label>NPK</label>
+                                <input type="text" class="form-input" value="10-30-20">
+                            </div>
+                            <div class="form-row">
+                                <label>Umidade</label>
+                                <input type="text" class="form-input" value="55%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="registrar-form-col">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-seedling text-green"></i> </h3>
+                            <div class="form-row">
+                                <label>Área plantada (Hectares)</label>
+                                <input type="number" id="area-plantada" class="form-input" value="13" placeholder="Digite a quantidade em hectares" oninput="app.updateResumoSafra()">
+                            </div>
+                            <div class="form-row">
+                                <label>Talhão</label>
+                                <input type="text" class="form-input" value="13 ha">
+                            </div>
+                            <div class="form-row">
+                                <label>Data do plantio</label>
+                                <input type="date" id="data-plantio" class="form-input" value="2025-04-01" onchange="app.updateResumoSafra()">
+                            </div>
+                            <div class="form-row">
+                                <label>Localização</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="localizacao" class="form-input" placeholder="Opcional:" oninput="app.updateResumoSafra()">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-15">
+                            <h3><i class="fa-regular fa-file-lines text-green"></i> Observações</h3>
+                            <textarea class="form-input" rows="4">Área preparada para plantio. Monitorar umidade nos proximos 7 dias</textarea>
+                        </div>
+
+                        <div class="card mt-15">
+                            <h3><i class="fa-solid fa-coins text-green"></i> Gastos iniciais</h3>
+                            <div class="form-row">
+                                <label>Qtd sementes necessárias (toneladas)</label>
+                                <input type="number" step="0.01" class="form-input" placeholder="Ex: 2.50">
+                            </div>
+                            <div class="form-row">
+                                <label>Qtd de grafite necessário (toneladas)</label>
+                                <input type="number" step="0.01" class="form-input" placeholder="Ex: 1.25">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="registrar-summary-col">
+                        <div class="card resumo-side">
+                            <div class="ribbon"><i class="fa-solid fa-bookmark"></i></div>
+                            <h3>Resumo da safra</h3>
+                            <div class="resumo-item">
+                                <div class="icon-circle-bg"><i class="fa-solid fa-leaf text-green"></i></div>
+                                <div>
+                                    <span class="label">Cultura</span><br>
+                                    <strong>Soja</strong>
+                                </div>
+                            </div>
+                            <div class="resumo-item border-top">
+                                <div class="icon-circle-bg"><i class="fa-solid fa-tree text-green"></i></div>
+                                <div>
+                                    <span class="label">Area plantada</span><br>
+                                    <strong>13 hectares</strong>
+                                </div>
+                            </div>
+                            <div class="resumo-item border-top">
+                                <div class="icon-circle-bg"><i class="fa-solid fa-tractor text-green"></i></div>
+                                <div>
+                                    <span class="label">Localização</span><br>
+                                    <strong>Não informado</strong>
+                                </div>
+                            </div>
+                            <div class="resumo-item border-top">
+                                <div class="icon-circle-bg"><i class="fa-regular fa-calendar-check text-green"></i></div>
+                                <div>
+                                    <span class="label">Previsão de colheita</span><br>
+                                    <strong>15/06/2025</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="registrar-actions card mt-15">
+                    <button class="btn-outline-gray" onclick="window.location.href='safras.html'">Cancelar</button>
+                    <button class="btn-primary-yellow" onclick="app.salvarSafra()">Salvar safra</button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals & Overlays -->
+    <div id="modal-container" class="modal-overlay" style="display: none;"></div>
+    
+    <!-- Chat Widget -->
+    <div id="chat-widget" class="chat-widget" style="display: none;">
+        <div class="chat-header">
+            <div><i class="fa-solid fa-headset"></i> Suporte AgroLogic</div>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="app.fecharChat()"></i>
+        </div>
+        <div class="chat-body" id="chat-messages">
+            <div class="message system">Seu atendimento foi iniciado</div>
+            <div class="message system">Nossa equipe responderá em breve</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Digite sua mensagem..." id="chat-input" onkeypress="if(event.key === 'Enter') app.enviarMensagemChat()">
+            <button onclick="app.enviarMensagemChat()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
